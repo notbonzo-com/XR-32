@@ -48,22 +48,23 @@ The `xr32-tool` binary provides all three functionalities—emulation, assembly,
   - `-v`, `--version`: Outputs the version of the emulator.
 
 - **Assembly Mode:**
-  - `-a`, `--assemble <source_file>`: Assembles the specified XR-32 assembly source file into a binary file.
+  - `-a`, `--assemble <source_file>`: Assembles the specified XR-32 assembly source file into a binary file. Master flag for assembly mode
+                                      If no source is provided, it will read from stdin.
   - `-o`, `--output <output_file>`: Specifies the output file for the assembled binary (default is `output.bin`).
+                                      If no output is provided, it will write to stdout.
 
 - **Disassembly Mode:**
-  - `-d`, `--disassemble <binary_file>`: Disassembles the specified XR-32 binary file into assembly code.
+  - `-d`, `--disassemble <binary_file>`: Disassembles the specified XR-32 binary file into assembly code. Master flag for disassembly mode
   - `-o`, `--output <output_file>`: Specifies the output file for the disassembled assembly code (default is `output.asm`).
 
 - **Emulation Mode:**
-  - `-e`, `--emulate <binary_file>`: Emulates the execution of the specified XR-32 binary file.
+  - `-e`, `--emulate`: Emulates the execution of the XR-32 processor. Master flag for emulation mode
   - `-hdd`, `--harddisk <hdd_image>`: Loads the specified hard disk image for the emulated system.
   - `-fda`, `--floppy <floppy_image>`: Loads the specified floppy disk image.
   - `--B`, `--bios <bios_file>`: Specifies the BIOS file to load for system emulation.
   - `--mem <size>`: Specifies the amount of memory for the emulated system (e.g., `--mem 256M` for 256 MB).
   - `--serial <output>`: Redirects serial port output to stdout or a specified file.
   - `--debugcon <output>`: Redirects debug console output (port e9) to stdout or a specified file.
-  - `--trace`: Enables instruction tracing, printing each executed instruction into stderr.
   - `-D`, `--dump <condition>`: Dumps the CPU state based on the specified condition:
     - `int`: Dump on every interrupt.
     - `<number>`: Dump after every specified number of clock cycles.
