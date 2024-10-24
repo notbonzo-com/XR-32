@@ -4,6 +4,7 @@
 #include <fstream>
 #include <utils/argparser.hpp>
 #include <utils/assembler.hpp>
+#include <components/cpu.hpp>
 #include <optional>
 #include <iomanip>
 
@@ -209,7 +210,61 @@ void handleConfig(const Config& config) {
 
     if (config.emulateFile) {
         std::cout << "Emulating file: " << *config.emulateFile << std::endl;
-        // TODO: Implement emulation logic
+
+        size_t memorySize = 64 * 1024 * 1024;
+        if (config.memSize) {
+            try {
+                memorySize = std::stoull(*config.memSize);
+            } catch (const std::exception& e) {
+                std::cerr << "Error: Invalid memory size specified: " << *config.memSize << std::endl;
+                return;
+            }
+        }
+
+        CPU cpu(memorySize);
+
+        std::ifstream binaryFile(*config.emulateFile, std::ios::binary);
+        if (!binaryFile) {
+            std::cerr << "Error: Could not open binary file: " << *config.emulateFile << std::endl;
+            return;
+        }
+
+        std::vector<uint8_t> programData((std::istreambuf_iterator<char>(binaryFile)), std::istreambuf_iterator<char>());
+        if (programData.size() > memorySize) {
+            std::cerr << "Error: Program exceeds available memory size" << std::endl;
+            return;
+        }
+
+        uint32_t startAddress = 0x1000;
+        for (size_t i = 0; i < programData.size(); ++i) {
+            cpu.memory.write(startAddress + i, programData[i]);
+        }
+
+        if (config.hddImage) {
+            std::cout << "Loading hard disk image: " << *config.hddImage << std::endl;
+            // TODO: Implement hard disk loading logic
+        }
+
+        if (config.floppyImage) {
+            std::cout << "Loading floppy disk image: " << *config.floppyImage << std::endl;
+            // TODO: Implement floppy loading logic
+        }
+
+        if (config.biosFile) {
+            std::cout << "Loading BIOS file: " << *config.biosFile << std::endl;
+            // TODO: Implement BIOS loading logic
+        }
+
+        try {
+            while (true) {
+                cpu.executeNextInstruction();
+                if (config.trace) {
+                    std::cerr << "Executed instruction at I0: 0x" << std::hex << cpu.registers.I0 << std::dec << std::endl;
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Emulation error: " << e.what() << std::endl;
+        }
     }
 }
 

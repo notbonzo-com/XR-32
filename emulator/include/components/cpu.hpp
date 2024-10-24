@@ -49,7 +49,7 @@ public:
     /**
      * @brief Constructs an CPU object with the specified components.
      */
-    constexpr CPU(Memory& mem, IO& io_arg, Interrupts& intr) noexcept;
+    CPU(size_t memorySize) noexcept;
 
     void executeNextInstruction();
     void reset() noexcept;
@@ -75,16 +75,12 @@ public:
         uint32_t MSR{0};              ///< Mode Status Register
     } registers;
 
-    Memory& memory;                   ///< Reference to memory component
-    IO& io;                           ///< Reference to IO component
-    Interrupts& interrupts;           ///< Reference to interrupt handler
-    InstructionSet& isa;              ///< Reference to ISA component
+    Memory memory;                    ///< memory component
+    IO io;                            ///< IO component
+    Interrupts interrupts;            ///< interrupt handler
+    InstructionSet isa;               ///< ISA component
 
 private:
-    void fetch();                     ///< Fetches the next instruction from memory
-    void decode();                    ///< Decodes the fetched instruction
-    void execute();                   ///< Executes the decoded instruction
-
     [[nodiscard]] uint64_t fetchInstruction() const; ///< Fetches the instruction code at the current I0
     
 public:

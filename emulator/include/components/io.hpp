@@ -55,7 +55,7 @@ public:
      * @param writeFunc The function to be called when writing to the port.
      * @throws std::invalid_argument if the port is already mapped.
      */
-    void mapDevice(uint16_t port, std::function<uint32_t()> readFunc, std::function<void(uint32_t)> writeFunc) noexcept;
+    void mapDevice(uint16_t port, std::function<uint32_t()> readFunc, std::function<void(uint32_t)> writeFunc);
 
 private:
     CPU& cpu;  ///< Reference to the CPU object for potential interactions with CPU state.
