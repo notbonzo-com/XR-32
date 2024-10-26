@@ -33,15 +33,6 @@ public:
 };
 
 /**
- * @brief Exception thrown for general assembler errors.
- */
-class GeneralAssemblerException : public AssemblerException {
-public:
-    explicit GeneralAssemblerException(const std::string& message)
-        : AssemblerException("Assembler Error: " + message) {}
-};
-
-/**
  * @brief Exception thrown for logical errors in the assembler.
  */
 class LogicalAssemblerException : public AssemblerException {
@@ -51,7 +42,16 @@ public:
 };
 
 /**
- * @brief Utility function to throw an exception with formatted message.
+ * @brief Exception thrown for general assembler errors.
+ */
+class GeneralAssemblerException : public AssemblerException {
+public:
+    explicit GeneralAssemblerException(const std::string& message)
+        : AssemblerException("Assembler Error: " + message) {}
+};
+
+/**
+ * @brief Utility function to throw an exception with a formatted message.
  *
  * This overload allows for throwing an exception with a formatted message using std::format.
  *
@@ -60,8 +60,9 @@ public:
  * @param args The arguments for the format string.
  */
 template <typename ExceptionType, typename... Args>
-[[noreturn]] void throwFormatted(const std::string& formatStr, Args&&... args) {
-    throw ExceptionType(std::format(formatStr, std::forward<Args>(args)...));
+[[noreturn]] void throwFormatted(std::string_view formatStr, Args&&... args) {
+    std::string formattedMessage = std::vformat(formatStr, std::make_format_args(std::forward<Args>(args)...));
+    throw ExceptionType(formattedMessage);
 }
 
 /**
@@ -73,7 +74,7 @@ template <typename ExceptionType, typename... Args>
  * @param args The arguments for the format string.
  */
 template <typename... Args>
-[[noreturn]] void throwGeneralError(const std::string& formatStr, Args&&... args) {
+[[noreturn]] void throwGeneralError(std::string_view formatStr, Args&&... args) {
     throwFormatted<GeneralAssemblerException>(formatStr, std::forward<Args>(args)...);
 }
 
@@ -86,7 +87,7 @@ template <typename... Args>
  * @param args The arguments for the format string.
  */
 template <typename... Args>
-[[noreturn]] void throwParseError(const std::string& formatStr, Args&&... args) {
+[[noreturn]] void throwParseError(std::string_view formatStr, Args&&... args) {
     throwFormatted<ParseException>(formatStr, std::forward<Args>(args)...);
 }
 
@@ -99,7 +100,7 @@ template <typename... Args>
  * @param args The arguments for the format string.
  */
 template <typename... Args>
-[[noreturn]] void throwSymbolError(const std::string& formatStr, Args&&... args) {
+[[noreturn]] void throwSymbolError(std::string_view formatStr, Args&&... args) {
     throwFormatted<SymbolException>(formatStr, std::forward<Args>(args)...);
 }
 
@@ -112,7 +113,7 @@ template <typename... Args>
  * @param args The arguments for the format string.
  */
 template <typename... Args>
-[[noreturn]] void throwLogicalError(const std::string& formatStr, Args&&... args) {
+[[noreturn]] void throwLogicalError(std::string_view formatStr, Args&&... args) {
     throwFormatted<LogicalAssemblerException>(formatStr, std::forward<Args>(args)...);
 }
 
