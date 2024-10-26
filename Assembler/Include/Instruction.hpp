@@ -7,9 +7,87 @@
 #include <stdexcept>
 #include <format>
 #include <optional>
-#include "Error.hpp"
+#include <Error.hpp>
 
 namespace Assembler {
+
+/**
+ * @brief Enum representing the set of supported instructions.
+ */
+enum class InstructionName {
+    ADD, SUB, MUL, DIV, AND, OR, XOR, LSL, LSR, CMP, MOV, ZEXT, MFS, MTS, LDR, STR,
+    JMP, JAR, BEQ, BNE, BZ, BNZ, BG, BL, CALL, KCALL, PUSH, POP, KPUSH, KPOP,
+    SWI, INC, DEC, RET, KRET, IRET, NOP, HLT, IN, OUT,
+    Count // Total number of instructions
+};
+
+/**
+ * @brief Array mapping instruction names to their opcode values.
+ */
+constexpr std::array<std::optional<uint8_t>, static_cast<size_t>(InstructionName::Count)> instructionToOpcodeArray = {
+    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A,
+    0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14,
+    0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E,
+    0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28
+};
+
+/**
+ * @brief Array mapping instruction names to their string representations.
+ */
+constexpr std::array<std::string_view, static_cast<size_t>(InstructionName::Count)> instructionToStringArray = {
+    "ADD", "SUB", "MUL", "DIV", "AND", "OR", "XOR", "LSL", "LSR", "CMP",
+    "MOV", "ZEXT", "MFS", "MTS", "LDR", "STR", "JMP", "JAR", "BEQ", "BNE",
+    "BZ", "BNZ", "BG", "BL", "CALL", "KCALL", "PUSH", "POP", "KPUSH", "KPOP",
+    "SWI", "INC", "DEC", "RET", "KRET", "IRET", "NOP", "HLT", "IN", "OUT"
+};
+
+/**
+ * @brief Converts an InstructionName to its opcode value.
+ *
+ * @param name The instruction name to convert.
+ * @return The corresponding opcode value.
+ */
+constexpr std::optional<uint8_t> instructionToOpcode(InstructionName name) {
+    return instructionToOpcodeArray[static_cast<size_t>(name)];
+}
+
+/**
+ * @brief Converts an opcode to an InstructionName.
+ *
+ * @param opcode The opcode value.
+ * @return The corresponding InstructionName, or std::nullopt if not found.
+ */
+constexpr std::optional<InstructionName> opcodeToInstruction(uint8_t opcode) {
+    auto it = std::find(instructionToOpcodeArray.begin(), instructionToOpcodeArray.end(), opcode);
+    if (it != instructionToOpcodeArray.end()) {
+        return static_cast<InstructionName>(std::distance(instructionToOpcodeArray.begin(), it));
+    }
+    return std::nullopt;
+}
+
+/**
+ * @brief Converts an InstructionName to its string representation.
+ *
+ * @param name The instruction name to convert.
+ * @return The string representation of the instruction.
+ */
+constexpr std::string_view instructionToString(InstructionName name) {
+    return instructionToStringArray[static_cast<size_t>(name)];
+}
+
+/**
+ * @brief Converts a string representation to an InstructionName.
+ *
+ * @param str The string representation.
+ * @return The corresponding InstructionName, or std::nullopt if not found.
+ */
+constexpr std::optional<InstructionName> stringToInstruction(std::string_view str) {
+    auto it = std::find(instructionToStringArray.begin(), instructionToStringArray.end(), str);
+    if (it != instructionToStringArray.end()) {
+        return static_cast<InstructionName>(std::distance(instructionToStringArray.begin(), it));
+    }
+    return std::nullopt;
+}
 
 /**
  * @brief Enum representing different addressing modes.

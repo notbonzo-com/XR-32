@@ -83,6 +83,7 @@
 		"text_encoding": "cpp",
 		"*.cp": "cpp",
 		"print": "cpp",
-		"generator": "cpp"
+		"generator": "cpp",
+		"expected": "cpp"
 	}
 }
