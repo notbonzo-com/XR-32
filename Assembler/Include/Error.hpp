@@ -42,6 +42,15 @@ public:
 };
 
 /**
+ * @brief Exception thrown for logical errors in the assembler.
+ */
+class LogicalAssemblerException : public AssemblerException {
+public:
+    explicit LogicalAssemblerException(const std::string& message)
+        : AssemblerException("Logical Error: " + message) {}
+};
+
+/**
  * @brief Utility function to throw an exception with formatted message.
  *
  * This overload allows for throwing an exception with a formatted message using std::format.
@@ -92,6 +101,19 @@ template <typename... Args>
 template <typename... Args>
 [[noreturn]] void throwSymbolError(const std::string& formatStr, Args&&... args) {
     throwFormatted<SymbolException>(formatStr, std::forward<Args>(args)...);
+}
+
+/**
+ * @brief Utility function to throw a logical assembler exception.
+ *
+ * This overload allows for throwing a LogicalAssemblerException with a formatted message.
+ *
+ * @param formatStr The format string.
+ * @param args The arguments for the format string.
+ */
+template <typename... Args>
+[[noreturn]] void throwLogicalError(const std::string& formatStr, Args&&... args) {
+    throwFormatted<LogicalAssemblerException>(formatStr, std::forward<Args>(args)...);
 }
 
 #endif // ERROR_HPP
