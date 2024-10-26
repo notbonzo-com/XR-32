@@ -7,6 +7,8 @@
 #include <array>
 #include <algorithm>
 
+namespace Assembler::Register {
+
 /**
  * @brief Enum representing all general-purpose, special-purpose, and other registers.
  */
@@ -106,5 +108,7 @@ constexpr std::optional<Register> stringToRegister(std::string_view str) {
     }
     return std::nullopt;
 }
+
+} // namespace Assembler::Register
 
 #endif // REGISTER_HPP

@@ -5,6 +5,8 @@
 #include <string>
 #include <format>
 
+namespace Assembler {
+
 /**
  * @brief Base class for all assembler-related exceptions.
  */
@@ -116,5 +118,7 @@ template <typename... Args>
 [[noreturn]] void throwLogicalError(std::string_view formatStr, Args&&... args) {
     throwFormatted<LogicalAssemblerException>(formatStr, std::forward<Args>(args)...);
 }
+
+} // namespace Assembler
 
 #endif // ERROR_HPP

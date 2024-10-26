@@ -9,6 +9,8 @@
 #include <optional>
 #include "Error.hpp"
 
+namespace Assembler {
+
 /**
  * @brief Enum representing different addressing modes.
  */
@@ -196,5 +198,7 @@ private:
     std::optional<uint8_t> offset;                  // Optional offset (for R/I-Type)
     InstructionType type;                           // Instruction type (R/I, N/A, RR/I)
 };
+
+} // namespace Assembler
 
 #endif // INSTRUCTION_HPP

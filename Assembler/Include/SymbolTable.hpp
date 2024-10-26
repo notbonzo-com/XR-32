@@ -12,6 +12,8 @@
 #include <iterator>
 #include <format>
 
+namespace Assembler {
+
 /**
  * @brief Manages mapping of symbols to addresses.
  *
@@ -184,10 +186,12 @@ private:
     std::unordered_map<std::string, uint32_t> symbolMap;
 };
 
+} // namespace Assembler
+
 // Formatter specialization for std::format to enable formatting of SymbolTable
 template <>
-struct std::formatter<SymbolTable> : std::formatter<std::string> {
-    auto format(const SymbolTable& table, auto& ctx) {
+struct std::formatter<Assembler::SymbolTable> : std::formatter<std::string> {
+    auto format(const Assembler::SymbolTable& table, auto& ctx) {
         std::string output;
         for (const auto& [name, address] : table.getAllEntries()) {
             output += std::format("{}: {}\n", name, address);
