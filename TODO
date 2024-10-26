@@ -1,1 +1,0 @@
-[] Add custom errors derriving from <std::runtime_error>
