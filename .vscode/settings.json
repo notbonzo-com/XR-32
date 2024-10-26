@@ -81,6 +81,8 @@
 		"format": "cpp",
 		"stdfloat": "cpp",
 		"text_encoding": "cpp",
-		"*.cp": "cpp"
+		"*.cp": "cpp",
+		"print": "cpp",
+		"generator": "cpp"
 	}
 }
